@@ -22,7 +22,7 @@ public class EventoController {
     private EventoService eventoService;
 
     @GetMapping("/{eventoID}")
-    public Evento findById(@PathVariable("eventoID") int eventoID) {
+    public Evento findById(@PathVariable("eventoID") String eventoID) {
         return eventoService.findById(eventoID);
     }
 
@@ -37,7 +37,7 @@ public class EventoController {
     }
 
     @PutMapping("/{eventoId}")
-    public Evento updateEvento(@PathVariable("eventoId") int id,@RequestBody NewEventoDTO body , BindingResult bindingResult) {
+    public Evento updateEvento(@PathVariable("eventoId") String id,@RequestBody NewEventoDTO body , BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             String messasge = bindingResult.getAllErrors().stream().map(DefaultMessageSourceResolvable::getDefaultMessage).collect(Collectors.joining(" - "));
             throw new BadRequestException(messasge);
@@ -46,7 +46,7 @@ public class EventoController {
     }
 
     @PatchMapping("/{eventoId}/stato")
-    public Evento updateStato(@PathVariable("eventoId") int dipendenteId, @RequestParam("stato") StatoDTO stato) {
+    public Evento updateStato(@PathVariable("eventoId") String dipendenteId, @RequestParam("stato") StatoDTO stato) {
         return this.eventoService.updateState(dipendenteId, stato);
     }
 

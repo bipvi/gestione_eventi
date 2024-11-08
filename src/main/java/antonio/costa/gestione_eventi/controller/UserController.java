@@ -27,30 +27,13 @@ public class UserController {
     @Autowired
     private EventoService eventoService;
 
-    @GetMapping
-    public Page<User> findAll(@RequestParam(defaultValue = "0") int page,
-                              @RequestParam(defaultValue = "10") int size,
-                              @RequestParam(defaultValue = "nome") String sortBy){
-        return this.userService.findAllUsers(page, size, sortBy);
-    }
-
-    @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public User save(@RequestBody NewUserDTO body, BindingResult bindingResult){
-        if (bindingResult.hasErrors()) {
-            String error = bindingResult.getAllErrors().stream().map(e -> e.getDefaultMessage()).collect(Collectors.joining(" - "));
-            throw new BadRequestException(error);
-        }
-        return this.userService.saveUser(body);
-    }
-
     @GetMapping("/{userId}")
-    public User findById(@PathVariable("userId") int userId){
+    public User findById(@PathVariable("userId") String userId){
         return this.userService.findById(userId);
     }
 
     @PutMapping("/{userId}")
-    public User update(@PathVariable("userId") int userId, @RequestBody @Validated NewUserDTO body, BindingResult bindingResult){
+    public User update(@PathVariable("userId") String userId, @RequestBody @Validated NewUserDTO body, BindingResult bindingResult){
         if (bindingResult.hasErrors()) {
             String messasge = bindingResult.getAllErrors().stream().map(DefaultMessageSourceResolvable::getDefaultMessage).collect(Collectors.joining(" - "));
             throw new BadRequestException(messasge);
@@ -60,22 +43,22 @@ public class UserController {
 
     @DeleteMapping("/{userId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void delete(@PathVariable("userId") int id) {
+    public void delete(@PathVariable("userId") String id) {
         this.userService.deleteUser(id);
     }
 
     @PatchMapping("/{userId}/stato")
-    public User uploadImage(@PathVariable("userId") int id, @RequestParam("stato") @Validated RuoloDTO ruolo) {
+    public User uploadImage(@PathVariable("userId") String id, @RequestParam("stato") @Validated RuoloDTO ruolo) {
         return this.userService.updateRuolo(id,ruolo);
     }
 
     @GetMapping("/{userId}/eventi")
-    public List<Evento> getEventi(@PathVariable("userId") int id) {
+    public List<Evento> getEventi(@PathVariable("userId") String id) {
         return this.userService.findEventiByUSer(id);
     }
 
     @PatchMapping("/{userId}/eventoId")
-    public Evento prenotaEvento(@PathVariable("userId") int id, @RequestParam("eventoId") int eventoId ) {
+    public Evento prenotaEvento(@PathVariable("userId") String id, @RequestParam("eventoId") String eventoId ) {
         return this.eventoService.findAndAddPartecipante(id, eventoId);
     }
 
