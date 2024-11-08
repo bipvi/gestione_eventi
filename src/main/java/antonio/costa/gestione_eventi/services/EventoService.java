@@ -16,6 +16,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 
 
 @Service
@@ -30,8 +31,9 @@ public class EventoService {
         return this.eventoRepo.save(evento);
     }
 
-    public Evento findById(int id) {
-        return this.eventoRepo.findById(id).orElseThrow(() -> new NotFoundException(id));
+    public Evento findById(String id) {
+        UUID uuid = UUID.fromString(id);
+        return this.eventoRepo.findById(uuid).orElseThrow(() -> new NotFoundException(id));
     }
 
     public Page<Evento> findAllEventi(int page, int size, String sortBy) {
@@ -39,7 +41,7 @@ public class EventoService {
         return this.eventoRepo.findAll(pageable);
     }
 
-    public Evento findAndAddPartecipante(int eventoId, int partecipantiId) {
+    public Evento findAndAddPartecipante(String eventoId, String partecipantiId) {
         Evento found = this.findById(eventoId);
         User foundUser = this.userService.findById(partecipantiId);
         if (found.getStato() == Stato.AL_COMPLETO) {
@@ -60,7 +62,7 @@ public class EventoService {
         return this.eventoRepo.save(found);
     }
 
-    public Evento findAndUpdate(int eventoId, NewEventoDTO body) {
+    public Evento findAndUpdate(String eventoId, NewEventoDTO body) {
         Evento eventoFound = this.findById(eventoId);
         eventoFound.setDescrizione(body.descrizione());
         eventoFound.setData(body.data());
@@ -69,7 +71,7 @@ public class EventoService {
         return this.eventoRepo.save(eventoFound);
     }
 
-    public Evento updateState(int eventoId, StatoDTO body) {
+    public Evento updateState(String eventoId, StatoDTO body) {
         Evento found = this.findById(eventoId);
         found.setStato(Stato.valueOf(body.stato()));
         return this.eventoRepo.save(found);
