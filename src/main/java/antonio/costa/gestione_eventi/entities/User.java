@@ -16,7 +16,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 @Getter
 @Setter
-@ToString
 @NoArgsConstructor
 @Entity
 @Table(name = "utenti")
@@ -57,5 +56,17 @@ public class User implements UserDetails{
     @Override
     public String getUsername() {
         return this.getEmail();
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "ruolo=" + ruolo +
+                ", password='" + password + '\'' +
+                ", email='" + email + '\'' +
+                ", nome='" + nome + '\'' +
+                ", cognome='" + cognome + '\'' +
+                ", id=" + id +
+                '}';
     }
 }
