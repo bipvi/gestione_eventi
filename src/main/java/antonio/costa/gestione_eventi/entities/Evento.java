@@ -14,7 +14,6 @@ import java.util.UUID;
 @Getter
 @Setter
 @NoArgsConstructor
-@ToString
 @Entity
 @Table(name = "eventi")
 public class Evento {
@@ -36,5 +35,17 @@ public class Evento {
         this.data = data;
         this.num_max_partecipanti = num_max_partecipanti;
         this.stato = Stato.PRENOTABILE;
+    }
+
+    @Override
+    public String toString() {
+        return "Evento{" +
+                "stato=" + stato +
+                ", num_max_partecipanti=" + num_max_partecipanti +
+                ", descrizione='" + descrizione + '\'' +
+                ", data=" + data +
+                ", titolo='" + titolo + '\'' +
+                ", id=" + id +
+                '}';
     }
 }
