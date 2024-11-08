@@ -8,14 +8,13 @@ import antonio.costa.gestione_eventi.entities.enums.Ruolo;
 import antonio.costa.gestione_eventi.exceptions.BadRequestException;
 import antonio.costa.gestione_eventi.exceptions.NotFoundException;
 import antonio.costa.gestione_eventi.repositories.UserRepo;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotEmpty;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -27,7 +26,7 @@ public class UserService {
     @Autowired
     private UserRepo userRepo;
     @Autowired
-    private BCryptPasswordEncoder encoder;
+    private PasswordEncoder encoder;
 
     public User saveUser(NewUserDTO body) {
         this.userRepo.findByEmail(body.email()).ifPresent(
