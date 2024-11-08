@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -41,6 +42,22 @@ public class UserController {
         return this.userService.findAndUpdateUser(userId, body);
     }
 
+    @GetMapping("/me")
+    public User getProfile(@AuthenticationPrincipal User currentAuthenticatedUser) {
+        return currentAuthenticatedUser;
+    }
+
+    @PutMapping("/me")
+    public User updateProfile(@AuthenticationPrincipal User currentAuthenticatedUser, @RequestBody @Validated NewUserDTO body) {
+        return this.userService.findAndUpdateUser(currentAuthenticatedUser.getId().toString(), body);
+    }
+
+    @DeleteMapping("/me")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteProfile(@AuthenticationPrincipal User currentAuthenticatedUser) {
+        this.userService.deleteUser(currentAuthenticatedUser.getId().toString());
+    }
+
     @DeleteMapping("/{userId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable("userId") String id) {
@@ -57,7 +74,7 @@ public class UserController {
         return this.userService.findEventiByUSer(id);
     }
 
-    @PatchMapping("/{userId}/eventoId")
+    @PatchMapping("/me/eventoId")
     public Evento prenotaEvento(@PathVariable("userId") String id, @RequestParam("eventoId") String eventoId ) {
         return this.eventoService.findAndAddPartecipante(id, eventoId);
     }
