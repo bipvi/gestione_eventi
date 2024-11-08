@@ -45,13 +45,13 @@ public class EventoService {
         if (found.getStato() == Stato.AL_COMPLETO) {
             throw new BadRequestException("L'evento " + found.getTitolo() + " è al completo");
         }
-        if (found.getPartecipanti().stream().count() >= found.getNum_max_partecipanti()){
+        if ((long) found.getPartecipanti().size() >= found.getNum_max_partecipanti()){
             throw new BadRequestException("L'evento " + found.getTitolo() + " è al completo");
         }
         if (found.getPartecipanti().stream().anyMatch(p -> p.equals(foundUser))) {
             throw new BadRequestException("Partecipante " + foundUser.getNome() + " si è già prenotato per l'evento");
         }
-        if (found.getNum_max_partecipanti() == found.getPartecipanti().stream().count() + 1){
+        if (found.getNum_max_partecipanti() == (long) found.getPartecipanti().size() + 1){
             found.setStato(Stato.AL_COMPLETO);
         }
         List<User> partecipanti = found.getPartecipanti();
